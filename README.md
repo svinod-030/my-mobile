@@ -1,50 +1,67 @@
+# My Mobile
 
-# TypeScript
+A React Native mobile application built with Expo and TypeScript.
 
-[![CI](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml/badge.svg)](https://github.com/microsoft/TypeScript/actions/workflows/ci.yml)
-[![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
-[![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/microsoft/TypeScript/badge)](https://securityscorecards.dev/viewer/?uri=github.com/microsoft/TypeScript)
+## Features
 
+- React Native with TypeScript support
+- Expo SDK for cross-platform development
+- iOS and Android support
+- Modern development environment
 
-[TypeScript](https://www.typescriptlang.org/) is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS. TypeScript compiles to readable, standards-based JavaScript. Try it out at the [playground](https://www.typescriptlang.org/play/), and stay up to date via [our blog](https://blogs.msdn.microsoft.com/typescript) and [Twitter account](https://twitter.com/typescript).
+## Prerequisites
 
-Find others who are using TypeScript at [our community page](https://www.typescriptlang.org/community/).
+- Node.js (v14 or newer)
+- npm or yarn
+- Expo CLI
+- iOS Simulator (for iOS development)
+- Android Studio and Android SDK (for Android development)
 
-## Installing
+## Getting Started
 
-For the latest stable version:
-
+1. Clone the repository:
 ```bash
-npm install -D typescript
+git clone https://github.com/svinod-030/my-mobile.git
+cd my-mobile
 ```
 
-For our nightly builds:
-
+2. Install dependencies:
 ```bash
-npm install -D typescript@next
+npm install
 ```
 
-## Contribute
+3. Start the development server:
+```bash
+npm start
+```
 
-There are many ways to [contribute](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md) to TypeScript.
-* [Submit bugs](https://github.com/microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
-* Review the [source code changes](https://github.com/microsoft/TypeScript/pulls).
-* Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript).
-* Help each other in the [TypeScript Community Discord](https://discord.gg/typescript).
-* Join the [#typescript](https://twitter.com/search?q=%23TypeScript) discussion on Twitter.
-* [Contribute bug fixes](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md).
+4. Run on specific platform:
+```bash
+# For iOS
+npm run ios
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see
-the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com)
-with any additional questions or comments.
+# For Android
+npm run android
+```
 
-## Documentation
+## Project Structure
 
-*  [TypeScript in 5 minutes](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
-*  [Programming handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
-*  [Homepage](https://www.typescriptlang.org/)
+```
+my-mobile/
+├── App.tsx          # Main application component
+├── app.json         # Expo configuration
+├── assets/         # Static assets
+├── package.json    # Project dependencies
+└── tsconfig.json   # TypeScript configuration
+```
 
-## Roadmap
+## Scripts
 
-For details on our planned features and future direction, please refer to our [roadmap](https://github.com/microsoft/TypeScript/wiki/Roadmap).
+- `npm start`: Start the Expo development server
+- `npm run ios`: Run on iOS simulator
+- `npm run android`: Run on Android emulator or connected device
+- `npm run web`: Run in web browser
+
+## License
+
+This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) file for details.
