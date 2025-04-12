@@ -15,36 +15,60 @@ import {
     Text, TouchableHighlight, useWindowDimensions,
     View,
     StatusBar,
-    LinearGradient,
 } from 'react-native';
 
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import {SearchBox} from "./src/components/SearchBox";
 import {Section} from "./src/components/Section";
-import {GoogleGenerativeAI} from "@google/generative-ai";
+import {GoogleGenerativeAI, Part, GenerateContentRequest} from "@google/generative-ai";
 import Markdown from 'react-native-markdown-display';
 import LottieView from "lottie-react-native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {CAMERA_SOURCE} from "./src/constants/index";
+import { GEMINI_API_KEY } from '@env';
+
+type ImagePart = {
+    inlineData: {
+        data: string;
+        mimeType: string;
+    };
+};
 
 function App(): React.JSX.Element {
   const {height, width} = useWindowDimensions();
-  const [aiResponse, setAiResponse] = useState<string>("Hello, I am Plif, AI model, Integrated with gemini (developed by google). I am designed to provide information and assist users with a wide range of topics and tasks.");
+  const [aiResponse, setAiResponse] = useState<string>("Hello, I am MyAI, powered by Google Gemini. I am designed to provide information and assist users with a wide range of topics and tasks.");
   const [searchInProgress, setSearchInProgress] = useState<boolean>(false);
-  const [image, setImage] = useState<any>(null);
+  const [image, setImage] = useState<ImagePart | null>(null);
   const [imageUri, setImageUri] = useState<string>();
-  const geminiProModel = useRef(new GoogleGenerativeAI("")
-      .getGenerativeModel({ model: "gemini-1.5-flash"}));
+  const geminiProModel = useRef(new GoogleGenerativeAI(GEMINI_API_KEY)
+      .getGenerativeModel({ model: "gemini-2.0-flash"}));
 
-    const onSearch = async (prompt) => {
+    const onSearch = async (prompt: string | undefined) => {
         setSearchInProgress(true)
         try {
-            let request = prompt;
-            if(image != null && prompt != null) {
-             request = [prompt, image];
-            } else if((prompt == undefined || prompt == null) && image != null) {
-                request = [image];
+            if (!prompt && !image) {
+                setAiResponse("Please provide a prompt or an image");
+                setSearchInProgress(false);
+                return;
             }
+
+            let request: GenerateContentRequest;
+            if (image) {
+                request = {
+                    contents: [{
+                        role: 'user',
+                        parts: [{ text: prompt || '' }, image]
+                    }]
+                };
+            } else {
+                request = {
+                    contents: [{
+                        role: 'user',
+                        parts: [{ text: prompt || '' }]
+                    }]
+                };
+            }
+
             const result = await geminiProModel.current.generateContent(request);
             const response = await result.response;
             const responseAsText = response.text();
@@ -84,9 +108,9 @@ function App(): React.JSX.Element {
         }
     };
 
-    const onSearchWithImage = async (source) => {
+    const onSearchWithImage = async (source: 'camera' | 'gallery') => {
         await requestCameraPermission();
-        let response
+        let response;
         if(source === CAMERA_SOURCE) {
             response = await launchCamera({
                 mediaType: 'mixed',
@@ -100,19 +124,17 @@ function App(): React.JSX.Element {
         }
         setSearchInProgress(true);
         try {
-            if(response.assets && response.assets[0]) {
-                const imageData = {
+            if(response.assets && response.assets[0] && response.assets[0].base64 && response.assets[0].type) {
+                const imageData: ImagePart = {
                     inlineData: {
                         data: response.assets[0].base64,
                         mimeType: response.assets[0].type,
                     },
                 };
                 setImage(imageData);
-                console.warn("image uri: " + response.assets[0].uri);
                 setImageUri(response.assets[0].uri);
             }
         } catch (e) {
-            // console.warn("Error occurred: " + e);
             setAiResponse("Error occurred: " + e);
         }
         setSearchInProgress(false);
